@@ -66,3 +66,36 @@ void Systick_Handler(void)
         pressTime++;
     }
 }
+void INT_Handler(void) {
+    if (GPIO_PORTF_RIS_R & 0x10) {
+        bp = 1;
+
+        GPIO_PORTF_ICR_R |= 0x10; // Clear interrupt
+    }
+
+    if ((GPIO_PORTF_DATA_R & 0x10) == 0x10)   // Button is released
+    {
+        if (bp)
+        {
+            if (pressTime < 100000)  // Short press
+            {
+
+                if (dutyCycle < 100)
+                {
+                    dutyCycle += 5; // Increaseed duty cycle by 5%
+                }
+            }
+            else
+            {  // Long press
+
+                if (dutyCycle > 0)
+                {
+                    dutyCycle -= 5; // Decreaseed duty cycle by 5%
+                }
+            }
+
+            pressTime = 0;
+            bp = 0;
+        }
+    }
+}
