@@ -60,3 +60,22 @@ void Systick_Handler(void) {
         onTime = 0;  // Reset onTime after it reaches to its  full count
     }
 }
+void Int_Handler(void) {
+    if (GPIO_PORTF_RIS_R & 0X10)
+    {
+        if (dutyCycle < 100)
+        {
+            dutyCycle += 5;  // Increased by 5%
+        }
+        GPIO_PORTF_ICR_R |= 0X10;   // Clear the interrupt
+    }
+
+    if (GPIO_PORTF_RIS_R & 0X01)
+    {
+        if (dutyCycle > 0)
+        {
+            dutyCycle -= 5;  // Decreased by 5%
+        }
+        GPIO_PORTF_ICR_R |= 0X01;   // Clear the interrupt
+    }
+}
