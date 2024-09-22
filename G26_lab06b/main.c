@@ -10,3 +10,11 @@ void init(void);
 void Systick_Init(void);
 void INT_Handler(void);
 void Systick_Handler(void);
+int main(void) {
+    init();   // Initialize GPIO for switches and LED
+    Systick_Init(); // Initialize Systick timer
+
+    while (1) {
+        //  do nothing.
+    }
+}
