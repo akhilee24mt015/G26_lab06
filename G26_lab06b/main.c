@@ -36,3 +36,33 @@ void init(void) {
 
     NVIC_EN0_R = 0x40000000 ;
 }
+void Systick_Init(void) {
+    NVIC_ST_RELOAD_R = count - 1;
+    NVIC_ST_CTRL_R = 0x07; //
+}
+
+// SysTick handler for generating software PWM and checking button press duration
+void Systick_Handler(void)
+{
+    static uint32_t onTime = 0; // Count for the "ON" duration
+
+
+    if (onTime < (dutyCycle * count) / 100)
+    {
+        GPIO_PORTF_DATA_R |= 0x02; // RED LED on
+    }
+    else
+    {
+        GPIO_PORTF_DATA_R &= ~0x02; // RED LED off
+    }
+
+    onTime++;
+    if (onTime >= count)
+    {
+        onTime = 0;  // Reset on Time after it reaches upto count value
+    }
+
+    if (bp) {
+        pressTime++;
+    }
+}
