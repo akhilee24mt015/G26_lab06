@@ -16,3 +16,23 @@ int main(void) {
         // Main loop does nothing, PWM and duty cycle control is handled by interrupts
     }
 }
+void init(void) {
+    SYSCTL_RCGCGPIO_R |= 0x020;
+                       GPIO_PORTF_LOCK_R = 0x4C4F434B;
+                       GPIO_PORTF_CR_R |= 0x10;          // Allow changes to PORTF4
+
+                           // Configure PF1 as output (LED)
+                           GPIO_PORTF_DIR_R = 0x02;
+                           GPIO_PORTF_DEN_R = 0x13;
+
+                           GPIO_PORTF_PUR_R = 0x11;
+
+
+                       GPIO_PORTF_IS_R = 0x00;   //  edge-sensitive
+                          GPIO_PORTF_IBE_R = 0x00;  // Interrupt controlled by IEV
+                          GPIO_PORTF_IEV_R = 0x00;  // falling edge trigger
+                          GPIO_PORTF_ICR_R = 0x11;   // removing prior interrupt
+                          GPIO_PORTF_IM_R = 0x11;    // Unmask interrupt for PORTF4
+
+                          NVIC_EN0_R = 0x40000000;
+}
