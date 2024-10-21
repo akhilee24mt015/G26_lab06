@@ -19,7 +19,7 @@ int main(void) {
 void init(void) {
     SYSCTL_RCGCGPIO_R |= 0x020;
                        GPIO_PORTF_LOCK_R = 0x4C4F434B;
-                       GPIO_PORTF_CR_R |= 0x10;          // Allow changes to PORTF4
+                       GPIO_PORTF_CR_R |= 0x11;          // Allow changes to PORTF4
 
                            // Configure PF1 as output (LED)
                            GPIO_PORTF_DIR_R = 0x02;
@@ -33,7 +33,7 @@ void init(void) {
                           GPIO_PORTF_IEV_R = 0x00;  // falling edge trigger
                           GPIO_PORTF_ICR_R = 0x11;   // removing prior interrupt
                           GPIO_PORTF_IM_R = 0x11;    // Unmask interrupt for PORTF4
-
+                          NVIC_PRI7_R &=0XFF3FFFFF;
                           NVIC_EN0_R = 0x40000000;
 }
 void Systick_Init(void) {
